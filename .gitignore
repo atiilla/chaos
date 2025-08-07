@@ -1,0 +1,23 @@
+# Build artifacts
+*.iso
+build.log
+
+# Live-build generated files
+.build/
+binary/
+cache/
+chroot/
+config/binary
+config/bootstrap
+config/chroot
+config/common
+config/source
+
+# Temporary files
+*~
+*.swp
+*.swo
+.DS_Store
+
+# Custom additions
+local/

@@ -1,0 +1,16 @@
+set theme=/boot/grub/themes/chaos/theme.txt
+export theme
+
+# Set a custom menu title
+set menu_color_normal=white/black
+set menu_color_highlight=black/light-gray
+
+# Set custom font
+loadfont unicode
+
+# Timeout for menu
+set timeout=5
+set timeout_style=menu
+
+# Set language
+set lang=en_US

@@ -1,0 +1,37 @@
+#!/bin/sh
+# Configure XFCE desktop and branding
+
+# Set hostname
+echo "chaos" > /etc/hostname
+
+# Create a custom ChaOS motd
+cat > /etc/motd << EOF
+  ██████╗██╗  ██╗ █████╗  ██████╗ ███████╗
+ ██╔════╝██║  ██║██╔══██╗██╔═══██╗██╔════╝
+ ██║     ███████║███████║██║   ██║███████╗
+ ██║     ██╔══██║██╔══██║██║   ██║╚════██║
+ ╚██████╗██║  ██║██║  ██║╚██████╔╝███████║
+  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝
+ 
+  Controlled Havoc for Red Teamers
+  Welcome to ChaOS - Use responsibly!
+
+EOF
+
+# Set default lightdm background
+if [ -d /etc/lightdm ]; then
+  mkdir -p /etc/lightdm/
+  cat > /etc/lightdm/lightdm-gtk-greeter.conf << EOF
+[greeter]
+background=/usr/share/backgrounds/chaos.png
+theme-name=Adwaita-dark
+icon-theme-name=Adwaita
+font-name=Sans 11
+EOF
+fi
+
+# Copy the wallpaper to backgrounds directory
+mkdir -p /usr/share/backgrounds/
+cp /etc/skel/Pictures/chaos.png /usr/share/backgrounds/
+
+exit 0
