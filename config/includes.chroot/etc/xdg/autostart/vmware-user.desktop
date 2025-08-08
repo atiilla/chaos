@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=VMware User Agent
+Comment=VMware User Agent
+Exec=/usr/bin/vmware-user
+Terminal=false
+X-GNOME-Autostart-enabled=true

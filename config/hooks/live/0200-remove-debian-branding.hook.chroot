@@ -1,0 +1,51 @@
+#!/bin/bash
+# Remove default Debian wallpapers and branding
+
+# Remove default Debian wallpapers
+if [ -d /usr/share/desktop-base/debian-theme ]; then
+  rm -rf /usr/share/desktop-base/debian-theme
+fi
+
+if [ -d /usr/share/images/desktop-base ]; then
+  find /usr/share/images/desktop-base -name '*debian*' -delete
+fi
+
+# Remove default backgrounds
+if [ -d /usr/share/backgrounds ]; then
+  find /usr/share/backgrounds -name '*debian*' -delete
+fi
+
+# Set ChaOS background as default
+if [ -f /usr/share/backgrounds/background.svg ]; then
+  # For XFCE
+  if [ -d /etc/xdg/xfce4/xfconf/xfce-perchannel-xml ]; then
+    cat > /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitor0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/background.svg"/>
+        </property>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+  fi
+fi
+
+# Update theme for solid appearance with no borders
+if [ -d /usr/share/themes/ChaOS/gtk-3.0 ]; then
+  sed -i 's/border: 1px solid.*/border: none;/g' /usr/share/themes/ChaOS/gtk-3.0/gtk.css
+  sed -i 's/border-radius: [0-9]px;/border-radius: 0px;/g' /usr/share/themes/ChaOS/gtk-3.0/gtk.css
+fi
+
+if [ -d /usr/share/themes/ChaOS/gtk-2.0 ]; then
+  sed -i 's/border-width:.*/border-width: 0/g' /usr/share/themes/ChaOS/gtk-2.0/gtkrc
+fi
+
+exit 0

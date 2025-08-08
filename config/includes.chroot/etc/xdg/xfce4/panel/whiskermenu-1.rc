@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<property name="plugin-1" type="empty">
+  <property name="custom-menu" type="bool" value="false"/>
+  <property name="button-icon" type="string" value="/usr/share/desktop-base/chaos-theme/chaos_logo.png"/>
+  <property name="button-title" type="string" value="ChaOS Apps"/>
+  <property name="show-button-title" type="bool" value="true"/>
+  <property name="show-generic-names" type="bool" value="false"/>
+  <property name="show-menu-icons" type="bool" value="true"/>
+  <property name="show-tooltips" type="bool" value="true"/>
+</property>

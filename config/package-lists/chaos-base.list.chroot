@@ -37,3 +37,10 @@ syslinux-common
 isolinux
 firmware-linux-nonfree
 firmware-misc-nonfree
+
+# Virtualization support
+open-vm-tools
+open-vm-tools-desktop
+plymouth
+plymouth-themes
+xserver-xorg-video-vmware

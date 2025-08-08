@@ -21,3 +21,8 @@ config/source
 
 # Custom additions
 local/
+
+# Logs
+*.log
+
+

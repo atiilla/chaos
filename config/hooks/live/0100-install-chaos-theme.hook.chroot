@@ -1,0 +1,161 @@
+#!/bin/bash
+# Install ChaOS custom theme
+
+# Create directories if they don't exist
+mkdir -p /usr/share/themes/ChaOS
+mkdir -p /usr/share/desktop-base/chaos-theme
+mkdir -p /usr/share/plymouth/themes/chaos-theme
+
+# Copy theme files from our chaos-theme directory
+if [ -d /usr/share/chaos-theme-files ]; then
+    # Copy the theme files to their final locations
+    cp -r /usr/share/chaos-theme-files/* /usr/share/themes/ChaOS/
+    
+    # Apply the solid no-border style
+    if [ -f /usr/share/chaos-theme-files/gtk-3.0/solid-no-border.css ] && [ -f /usr/share/themes/ChaOS/gtk-3.0/gtk.css ]; then
+        cat /usr/share/chaos-theme-files/gtk-3.0/solid-no-border.css >> /usr/share/themes/ChaOS/gtk-3.0/gtk.css
+    fi
+    
+    # Copy wallpaper and relevant files to desktop-base
+    cp -r /usr/share/chaos-theme-files/chaos_logo.png /usr/share/desktop-base/chaos-theme/
+    cp -r /etc/skel/Pictures/background.svg /usr/share/desktop-base/chaos-theme/
+    cp -r /usr/share/chaos-theme-files/index.theme /usr/share/desktop-base/chaos-theme/
+    
+    # Setup Plymouth theme (boot splash)
+    cp -r /usr/share/chaos-theme-files/login_screen.svg /usr/share/plymouth/themes/chaos-theme/
+    
+    # Create Plymouth theme configuration
+    cat > /usr/share/plymouth/themes/chaos-theme/chaos-theme.plymouth << EOF
+[Plymouth Theme]
+Name=ChaOS Theme
+Description=ChaOS Boot Screen
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/chaos-theme
+ScriptFile=/usr/share/plymouth/themes/chaos-theme/chaos-theme.script
+EOF
+
+    # Create Plymouth theme script
+    cat > /usr/share/plymouth/themes/chaos-theme/chaos-theme.script << EOF
+wallpaper_image = Image("login_screen.svg");
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+resized_wallpaper_image = wallpaper_image.Scale(screen_width, screen_height);
+wallpaper_sprite = Sprite(resized_wallpaper_image);
+wallpaper_sprite.SetZ(-100);
+EOF
+
+    # Set Plymouth theme as default
+    update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/chaos-theme/chaos-theme.plymouth 100
+    update-alternatives --set default.plymouth /usr/share/plymouth/themes/chaos-theme/chaos-theme.plymouth
+    update-initramfs -u
+    
+    # Set as default theme for XFCE
+    if [ -d /etc/xdg/xfce4 ]; then
+        mkdir -p /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/
+        cat > /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitor0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="color-style" type="int" value="0"/>
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/desktop-base/chaos-theme/background.svg"/>
+        </property>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+
+        # Set GTK theme
+        cat > /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xsettings" version="1.0">
+  <property name="Net" type="empty">
+    <property name="ThemeName" type="string" value="ChaOS"/>
+    <property name="IconThemeName" type="string" value="ChaOS"/>
+  </property>
+  <property name="Gtk" type="empty">
+    <property name="CursorThemeName" type="string" value="ChaOS"/>
+  </property>
+</channel>
+EOF
+
+        # Set window manager theme
+        cat > /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfwm4" version="1.0">
+  <property name="general" type="empty">
+    <property name="theme" type="string" value="ChaOS"/>
+    <property name="button_layout" type="string" value="O|HMC"/>
+    <property name="activate_action" type="string" value="bring"/>
+    <property name="borderless_maximize" type="bool" value="true"/>
+    <property name="box_move" type="bool" value="false"/>
+    <property name="box_resize" type="bool" value="false"/>
+    <property name="show_app_icon" type="bool" value="false"/>
+    <property name="title_alignment" type="string" value="center"/>
+    <property name="title_font" type="string" value="Sans Bold 9"/>
+    <property name="wrap_cycle" type="bool" value="true"/>
+  </property>
+</channel>
+EOF
+
+        # Configure display settings for VMware auto-resize
+        cat > /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/displays.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="displays" version="1.0">
+  <property name="Default" type="empty">
+    <property name="Virtual1" type="string" value="Virtual1">
+      <property name="Active" type="bool" value="true"/>
+      <property name="Resolution" type="string" value="Auto"/>
+      <property name="RefreshRate" type="double" value="60.0"/>
+      <property name="Primary" type="bool" value="true"/>
+      <property name="Scale" type="empty">
+        <property name="X" type="double" value="1.000000"/>
+        <property name="Y" type="double" value="1.000000"/>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+    fi
+    
+    # Clean up
+    rm -rf /usr/share/chaos-theme-files
+fi
+
+# Set as default for lightdm
+if [ -d /etc/lightdm ]; then
+    mkdir -p /etc/lightdm/
+    cat > /etc/lightdm/lightdm-gtk-greeter.conf << EOF
+[greeter]
+background=/usr/share/desktop-base/chaos-theme/background.svg
+theme-name=ChaOS
+icon-theme-name=ChaOS
+EOF
+fi
+
+# Configure VMware tools for auto-resize support
+if [ -f /usr/bin/vmware-user ]; then
+    mkdir -p /etc/xdg/autostart
+    cat > /etc/xdg/autostart/vmware-user.desktop << EOF
+[Desktop Entry]
+Type=Application
+Name=VMware User Agent
+Comment=VMware User Agent
+Exec=/usr/bin/vmware-user
+Terminal=false
+X-GNOME-Autostart-enabled=true
+EOF
+fi
+
+# Ensure that open-vm-tools is installed
+if [ -f /usr/bin/apt ]; then
+    apt-get -y install open-vm-tools open-vm-tools-desktop --no-install-recommends
+fi
+
+exit 0
