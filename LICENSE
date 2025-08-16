@@ -1,0 +1,14 @@
+ChaOS Linux - License Summary
+
+This project is open source. Individual components may have their own licenses:
+
+- Debian components: Various open source licenses. See Debian documentation for details.
+- XFCE: GNU General Public License v2 or later (GPL v2+). See https://www.xfce.org/
+- GRUB: GNU General Public License v3 or later (GPL v3+). See https://www.gnu.org/software/grub/
+- Custom scripts: GNU General Public License v3 or later (GPL v3+). See individual script headers for details.
+
+For full license texts, see:
+- GPL v2: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+- GPL v3: https://www.gnu.org/licenses/gpl-3.0.html
+
+If you redistribute or modify this project, ensure compliance with the relevant licenses for each component.
