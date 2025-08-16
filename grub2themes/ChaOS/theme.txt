@@ -1,0 +1,96 @@
+# ChaOS GRUB Theme (1080p)
+# Custom theme for ChaOS Linux Distribution
+
+# Desktop settings
+desktop-image: "grub_background.png"
+desktop-image-scale-method: "crop"
+desktop-image-h-align: "center" 
+desktop-image-v-align: "center"
+desktop-color: "#000000"
+title-text: ""
+
+# Terminal settings
+terminal-font: "Unifont Regular 16"
+terminal-left: "15%"
+terminal-top: "30%"
+terminal-width: "70%"
+terminal-height: "50%"
+terminal-border: "0"
+
+# Boot menu configuration
++ boot_menu {
+    left = 20%
+    top = 30%
+    width = 60%
+    height = 40%
+    
+    # Menu appearance
+    item_font = "Unifont Regular 16"
+    item_color = "#ffffff"
+    selected_item_font = "Unifont Bold 18"
+    selected_item_color = "#ff6666"
+    selected_item_pixmap_style = "highlight_*.png"
+    
+    # Background for menu items
+    menu_pixmap_style = "menu_*.png"
+    
+    # Item spacing and dimensions
+    item_height = 35
+    item_padding = 10
+    item_spacing = 2
+    icon_width = 24
+    icon_height = 24
+    item_icon_space = 10
+    
+    # Scrollbar
+    scrollbar = true
+    scrollbar_width = 12
+    scrollbar_left_pad = 4
+    scrollbar_right_pad = 4
+    scrollbar_top_pad = 4
+    scrollbar_bottom_pad = 4
+    scrollbar_frame = false
+}
+
+# Progress bar for timeout
++ progress_bar {
+    id = "__timeout__"
+    left = 20%
+    top = 80%
+    width = 60%
+    height = 24
+    
+    text = "@TIMEOUT_NOTIFICATION_LONG@"
+    text_color = "#ffffff"
+    font = "Unifont Regular 14"
+    
+    fg_color = "#ffffff"
+    bg_color = "#666666"
+    border_color = "#ffffff"
+}
+
+# Label for ChaOS branding
++ label {
+    top = 10%
+    left = 20%
+    width = 60%
+    height = 40
+    
+    text = "ChaOS Linux"
+    color = "#ffffff"
+    font = "Unifont Bold 24"
+    align = "center"
+}
+
+# Label for subtitle
++ label {
+    top = 15%
+    left = 20%
+    width = 60%
+    height = 30
+    
+    text = "Choose your adventure"
+    color = "#cccccc"
+    font = "Unifont Regular 16"
+    align = "center"
+}
