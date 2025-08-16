@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Fix ChaOS Wallpaper
-Comment=Sets the correct wallpaper for ChaOS
-Exec=/usr/local/bin/fix-wallpaper.sh
-Terminal=false
-Hidden=false
-X-GNOME-Autostart-enabled=true
